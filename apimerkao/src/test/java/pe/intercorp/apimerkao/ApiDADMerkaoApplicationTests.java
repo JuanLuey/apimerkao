@@ -1,10 +1,10 @@
-package pe.spsa.apiwms;
+package pe.intercorp.apimerkao;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ApiwmsApplicationTests {
+class ApiDADMerkaoApplicationTests {
 
 	@Test
 	void contextLoads() {
