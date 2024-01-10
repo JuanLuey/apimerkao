@@ -1,8 +1,9 @@
 # test_api_wms
-Demo consumo de API de WMS spring boot 
+Consumo de API DAD - MERKAO
 
 # application.properties
 api.url=XXXX
+api.url2=XXXX
 api.username=XXXX
 api.password=XXX
 spring.datasource.url=XXX
