@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -23,9 +24,12 @@ public class RepoApi {
         @Value("${api.password}")
         public String api_password;
 
+        @Autowired
+        RepoData repoData;
+
         private final Logger logger = LoggerFactory.getLogger(RepoApi.class);
 
-        public EntityMerkao getApiDAD(String shipment_nbr, String accesstoken) throws IOException {
+        public EntityMerkao getApiDAD(String salesNote, String accesstoken) throws IOException {
 
                 EntityMerkao entityMerkao = null;
 
@@ -38,7 +42,7 @@ public class RepoApi {
 
                 Request request = new Request.Builder()
                                 .url(api_url2
-                                                + "/" + shipment_nbr)
+                                                + "/" + salesNote)
                                 .method("GET", null)
                                 .addHeader("Authorization", "Bearer " + accesstoken)
                                 .build();
@@ -52,16 +56,15 @@ public class RepoApi {
                 logger.info(" Response Api DAD :  {}", responseApiDAD);
 
                 if (responseApiDAD == 200) {
-
                         entityMerkao = objectMapper.readValue(response_body, EntityMerkao.class);
-
-                        logger.info(" response OK :  {}", responseApiDAD);
-
+                        logger.info(" insert stage IFH_STG_MERKAO_GET_API_DAD response : {}", responseApiDAD);
+                        repoData.insertSaleNote(entityMerkao);
                 } else if (responseApiDAD == 404) {
-                        logger.info(" No data found header :  {}", responseApiDAD);
-
+                        logger.info(" No data found response :  {}", responseApiDAD);
+                        repoData.insertErrorSaleNote(salesNote, responseApiDAD);
                 } else {
                         logger.info(" other error response:  {}", responseApiDAD);
+                        repoData.insertErrorSaleNote(salesNote, responseApiDAD);
                 }
 
                 return entityMerkao;

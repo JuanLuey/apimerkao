@@ -25,6 +25,8 @@ public class ApiDADMerkaoApplication implements CommandLineRunner {
 		SpringApplication.run(ApiDADMerkaoApplication.class, args);
 	}
 
+	public int error_code;
+
 	@Autowired
 	RepoApiLogin repoApiLogin;
 
@@ -44,19 +46,24 @@ public class ApiDADMerkaoApplication implements CommandLineRunner {
 		repoApiLogin.api_autorization = repoApiLogin.login();
 
 		var getSaleNote = repoData.getSaleNote();
-		log.info(" log getSaleNote :{}", getSaleNote.get(0).salenote.toString());
 
-		EntityMerkao result = repoApi.getApiDAD(getSaleNote.get(0).salenote.toString(), repoApiLogin.api_autorization);
-
-		if (result.equals("0")) {
-			log.info(" log Not data found : {}",
-					getSaleNote.get(0).salenote.toString());
+		if (getSaleNote.size() == 0) {
+			log.info(" log Not data found getSaleNote ");
 		} else {
-			int i = repoData.updateSaleNote(result);
 
-			if (i == 1) {
-				log.info(" log insert stage IFH_STG_MERKAO_GET_API_DAD OK : {}",
-						getSaleNote.get(0).salenote.toString());
+			for (int y = 0; y < getSaleNote.size(); y++) {
+
+				log.info(" log getSaleNote :{}", getSaleNote.get(y).salenote.toString());
+
+				EntityMerkao result = repoApi.getApiDAD(getSaleNote.get(y).salenote.toString(),
+						repoApiLogin.api_autorization);
+
+				if (result != null) {
+					if (result.equals("0")) {
+						log.info(" log Not data found : {}",
+								getSaleNote.get(y).salenote.toString());	
+					} 
+				}
 			}
 		}
 

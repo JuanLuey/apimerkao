@@ -3,6 +3,7 @@ package pe.intercorp.apimerkao.repository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 
 import pe.intercorp.apimerkao.entity.EntityMerkao;
@@ -21,8 +22,11 @@ public class RepoData {
                 List<EntitySaleNote> saleNotes = null;
 
                 String SQLSeq = """
-                                 SELECT '2400015754772' AS SALENOTE FROM DUAL
-                                """;
+                                SELECT DOM.NOTA_VENTA AS SALENOTE
+                                FROM DAD_ORDER_HD_MERKAO DOM
+                                WHERE DOM.ORDERNUMBER IS NULL
+                                GROUP BY DOM.NOTA_VENTA
+                                              """;
                 saleNotes = jdbcTemplate.query(SQLSeq,
                                 new Object[] {},
                                 new int[] {},
@@ -31,14 +35,7 @@ public class RepoData {
                 return saleNotes;
         }
 
-        /*
-         * SELECT DOM.NOTA_VENTA AS SALENOTE
-         * FROM DAD_ORDER_HD_MERKAO DOM
-         * WHERE DOM.ORDERNUMBER IS NULL
-         * GROUP BY DOM.NOTA_VENTA
-         */
-
-        public int updateSaleNote(EntityMerkao entityMerkao) {
+        public int insertSaleNote(EntityMerkao entityMerkao) {
 
                 String v_sql = """
                                 INSERT INTO EINTERFACE.IFH_STG_MERKAO_GET_API_DAD
@@ -60,10 +57,12 @@ public class RepoData {
                                 UBIGEOCODE,
                                 DISTRICT,
                                 PROVINCE,
-                                DEPARTMENT
+                                DEPARTMENT,
+                                API_RESPONSE
                                 )
                                 VALUES
                                 (
+                                ?,
                                 ?,
                                 ?,
                                 ?,
@@ -101,7 +100,39 @@ public class RepoData {
                                 entityMerkao.getDetails().get(0).getAddress().getUbigeoCode().toString(),
                                 entityMerkao.getDetails().get(0).getAddress().getUbigeo().getDistrict().toString(),
                                 entityMerkao.getDetails().get(0).getAddress().getUbigeo().getProvince().toString(),
-                                entityMerkao.getDetails().get(0).getAddress().getUbigeo().getDepartment().toString());
+                                entityMerkao.getDetails().get(0).getAddress().getUbigeo().getDepartment().toString(),
+                                200);
+
+                                stored_procedure_merkao();
+
+                return i;
+
+        }
+
+        public void stored_procedure_merkao() {
+                SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate)
+                                .withCatalogName("MERKAO_PKG_INTERFACES")
+                                .withProcedureName("SP_PROC_ORDER_HD_DAD");
+                simpleJdbcCall.execute();
+        }
+
+        public int insertErrorSaleNote(String salesNote, int codeError) {
+                String v_sql = """
+                                INSERT INTO EINTERFACE.IFH_STG_MERKAO_GET_API_DAD
+                                (
+                                NOTA_VENTA,
+                                API_RESPONSE,
+                                DOWNLOAD_DATE
+                                )
+                                VALUES
+                                (
+                                ?,
+                                ?,
+                                SYSDATE
+                                )
+                                """;
+                var i = jdbcTemplate.update(v_sql, salesNote,
+                                codeError);
 
                 return i;
 

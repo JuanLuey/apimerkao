@@ -7,7 +7,6 @@ public class EntityDetail {
     private String skuCode;
     private double skuPartialSequence;
     private String description;
-
     private String line;
     private String lpnNumber;
     private double totalItems;
