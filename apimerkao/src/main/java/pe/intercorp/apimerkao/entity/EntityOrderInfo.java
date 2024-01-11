@@ -23,21 +23,3 @@ public class EntityOrderInfo {
     private Boolean op14payment;
 }
 
-// "orderInfo": {
-// "orderNumber": "2400015754772",
-// "ecommerceId": "1704828935977-01",
-// "companyCode": "SPSA",
-// "saleEntity": "JOKR MAKRO SANTA ANITA",
-// "saleEntityCode": "SPSA-1501",
-// "username": "MERKAO",
-// "freightAuthUsername": "-",
-// "priceAuthUsername": "-",
-// "saleWithoutStockUsername": "-",
-// "generatedDate": "2024-01-09",
-// "totalAmount": "-",
-// "status": "Pagada",
-// "stateCode": "PAYED",
-// "paymentMethod": "CASH_ON_DELIVERY",
-// "startEffectiveDate": "09/01/2024",
-// "endEffectiveDate": "09/01/2024",
-// "op14payment": false

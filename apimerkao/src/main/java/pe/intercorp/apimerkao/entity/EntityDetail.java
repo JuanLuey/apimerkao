@@ -25,25 +25,6 @@ public class EntityDetail {
     private String deliveryMode;
     private String withdrawPerson;
     private String withdrawPersonDocument;
+    private EntityAddress address;
 }
 
-// "skuCode": "108119",
-// "skuPartialSequence": 0,
-// "description": "A1 FILETE DE ATUN AC VEG LA 170GR",
-// "line": "SPSA-F0029",
-// "lpnNumber": "-",
-// "totalItems": 10,
-// "canceledItems": 0,
-// "deliveredItems": 0,
-// "availableItems": 10,
-// "origin": "JOKR MAKRO SANTA ANITA",
-// "originCode": "SPSA-1501",
-// "originType": "TD",
-// "destinationCode": "SPSA-ZN-106",
-// "destination": "Avenida San Borja Norte,NRO: 1079,DPTO: 302,PISO: ,",
-// "deliveryDate": "2024-01-09",
-// "withdrawalEffectiveDate": null,
-// "dispatchNumber": "2400015754772-1",
-// "deliveryMode": "HOME_DELIVERY",
-// "withdrawPerson": null,
-// "withdrawPersonDocument": null,

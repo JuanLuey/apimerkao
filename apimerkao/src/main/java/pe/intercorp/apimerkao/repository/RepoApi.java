@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.beans.factory.annotation.Value;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -24,7 +25,9 @@ public class RepoApi {
 
         private final Logger logger = LoggerFactory.getLogger(RepoApi.class);
 
-        public int getApiDAD(String shipment_nbr, String accesstoken) throws IOException {
+        public EntityMerkao getApiDAD(String shipment_nbr, String accesstoken) throws IOException {
+
+                EntityMerkao entityMerkao = null;
 
                 OkHttpClient client = new OkHttpClient().newBuilder()
                                 .build();
@@ -50,18 +53,18 @@ public class RepoApi {
 
                 if (responseApiDAD == 200) {
 
-                        EntityMerkao entityMerkao = objectMapper.readValue(response_body, EntityMerkao.class);
+                        entityMerkao = objectMapper.readValue(response_body, EntityMerkao.class);
 
                         logger.info(" response OK :  {}", responseApiDAD);
-                        return 0;
 
                 } else if (responseApiDAD == 404) {
                         logger.info(" No data found header :  {}", responseApiDAD);
-                        return 1;
+
                 } else {
                         logger.info(" other error response:  {}", responseApiDAD);
-                        return 1;
                 }
+
+                return entityMerkao;
 
         }
 
